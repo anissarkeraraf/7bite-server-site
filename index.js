@@ -59,6 +59,30 @@ async function run() {
       res.send(result)
     })
 
+    app.put('/service/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const services = req.body;
+      const updateOperation = {
+        //  serviceName, price, serviceArea, providerEmail, providerImage, providerName };
+        $set: {
+          serviceName: services.serviceName,
+          price: services.price,
+          serviceArea: services.serviceArea,
+          providerEmail: services.providerEmail,
+          providerImage: services.providerImage,
+          providerName: services.providerName,
+        }
+      };
+      try {
+        const result = await doctorCollection.updateOne(filter, updateOperation);
+        res.send(result);
+      } catch (error) {
+        console.error('Error updating tourist spot:', error);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+
     app.delete('/service/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
