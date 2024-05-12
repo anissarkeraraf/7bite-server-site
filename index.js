@@ -52,13 +52,27 @@ async function run() {
       res.send(result);
     })
 
-    // Services
 
 
     app.get('/services/:email', async (req, res) => {
       const result = await doctorCollection.find({ providerEmail: req.params.email }).toArray();
       res.send(result)
-      })
+    })
+
+    app.delete('/service/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+    
+      try {
+        const result = await doctorCollection.deleteOne(query);
+        res.send(result);
+      } catch (error) {
+        console.error('Error deleting document:', error);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+
+
 
 
     // Send a ping to confirm a successful connection
