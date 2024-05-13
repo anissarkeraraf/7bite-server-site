@@ -31,6 +31,7 @@ async function run() {
     // await client.connect();
 
     const doctorCollection = client.db('doctorsCollection').collection('services');
+    const purchaseCollection = client.db('doctorsCollection').collection('purchase');
 
     app.post('/service', async (req, res) => {
       const doctorServices = req.body;
@@ -86,7 +87,7 @@ async function run() {
     app.delete('/service/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-    
+
       try {
         const result = await doctorCollection.deleteOne(query);
         res.send(result);
@@ -95,6 +96,15 @@ async function run() {
         res.status(500).send('Internal Server Error');
       }
     });
+
+    // another collection
+    app.post('/purchase', async (req, res) => {
+      const doctorServices = req.body;
+      console.log(doctorServices);
+      const result = await purchaseCollection.insertOne(doctorServices);
+      res.send(result);
+    })
+
 
 
 
