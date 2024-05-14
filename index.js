@@ -105,6 +105,40 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/purchase', async (req, res) => {
+      const cursor = purchaseCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+    app.get('/purchase/:id', async (req, res) => {
+      const id = req.params.id;
+      const qurey = { _id: new ObjectId(id) }
+      const result = await purchaseCollection.findOne(qurey);
+      res.send(result);
+    })
+
+    app.get('/purchases/:email', async (req, res) => {
+      const result = await purchaseCollection.find({ email: req.params.email }).toArray();
+      res.send(result)
+    })
+
+    app.get('/purchase-provider/:email', async (req, res) => {
+      const result = await purchaseCollection.find({ providerEmail: req.params.email }).toArray();
+      res.send(result)
+    })
+
+    app.patch('/purchases/:id', async(req, res) => {
+      const id = req.params.id;
+      const action = req.body;
+      const query = {_id: new ObjectId(id)}
+      const updateDoc = {
+        $set: action,
+      }
+      const result = await purchaseCollection.updateOne(query, updateDoc)
+      res.send(result)
+    })
+
 
 
 
